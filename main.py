@@ -1,5 +1,4 @@
 #%% 
- 
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -40,10 +39,10 @@ def train():
     """
     state, action, next_state, reward, done = buffer.sample()
     
-    # Predicted values
+    # Predicted values: Q^\pi (s_t, a_t)
     state_action_values = policy_dqn(state).gather(1, action)
     
-    # Target values
+    # Target values: r + \gamma Q^\pi(s_t+1, \pi(s_t+1))
     with torch.no_grad():
         next_state_values = target_dqn(next_state).max(1)[0]
         next_state_values *= ~done
@@ -56,7 +55,7 @@ def train():
     torch.nn.utils.clip_grad_value_(policy_dqn.parameters(), 100)
     optimizer.step()
     
-    # Soft update target network
+    # Soft update target network: \bar{\theta} <- \tau\theta + (1 - \tau) \bar{\theta}
     target_dqn_state_dict = target_dqn.state_dict()
     policy_dqn_state_dict = policy_dqn.state_dict()
     for key in policy_dqn_state_dict:
@@ -86,7 +85,6 @@ def run_episode(render = False, episode_num = 0):
     """
     Execute one episode of the environment.
     """
-    
     state = env.reset()
     state = torch.tensor(state, device=device).unsqueeze(0)
     t = 0

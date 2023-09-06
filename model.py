@@ -1,9 +1,10 @@
+#%%
 import torch.nn as nn
 from torchinfo import summary as torch_summary
 
 class DQN(nn.Module):
     """
-    Deep Q-Network (DQN) Model.
+    Deep Q-Network (DQN) Model. Q^\pi approximates Q^* by estimating r + \gamma Q^\pi (s_t+1, \pi(s_t+1))
     """
     def __init__(self, n_observations=4, n_actions=2):
         """
@@ -36,4 +37,5 @@ if __name__ == "__main__":
     
     # Print the model summary
     print("\nModel Summary:")
-    torch_summary(dqn, input_size=(128, 4))
+    torch_summary(dqn, (3, 4))
+# %%
