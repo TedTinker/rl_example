@@ -72,7 +72,9 @@ def select_action(state):
 
     if random.random() > RANDOM_ACTION_THRESHOLD:
         with torch.no_grad():
-            action = policy_dqn(state).max(1)[1].view(1, 1)
+            action = policy_dqn(state)
+            print(action)
+            action = action.max(1)[1].view(1, 1)
     else:   action = torch.tensor([[env.action_space.sample()]], device=device, dtype=torch.long)
 
     RANDOM_ACTION_THRESHOLD *= RANDOM_ACTION_DECAY
