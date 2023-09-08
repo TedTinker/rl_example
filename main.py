@@ -104,7 +104,6 @@ def run_episode(render = False, episode_num = 0):
         action = select_action(state)
         next_state, reward, done, _ = env.step(action.item())
         next_state = torch.tensor(next_state, device=device).unsqueeze(0)
-        reward = torch.tensor([-1 if done else 1], device=device)
         buffer.push(state, action, next_state, reward, torch.tensor(done).unsqueeze(0))
         state = next_state
         train()
